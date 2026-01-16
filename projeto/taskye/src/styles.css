@@ -1,0 +1,123 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Responsividade Global */
+@media (max-width: 768px) {
+  /* Sidebar responsiva para páginas que não usam layout compartilhado */
+  .position-fixed[style*="width: 80px"] {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .position-fixed[style*="width: 80px"].show {
+    transform: translateX(0);
+  }
+  
+  /* Ajustar margin-left do conteúdo quando sidebar está oculta */
+  .col[style*="margin-left: 80px"] {
+    margin-left: 0 !important;
+  }
+  
+  /* Overlay para mobile */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+  }
+  
+  .sidebar-overlay.show {
+    display: block;
+  }
+  
+  /* Header responsivo */
+  .header-user-info {
+    display: none !important;
+  }
+  
+  /* Cards de métricas menores em mobile */
+  .card-body h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  /* Tabelas responsivas */
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+  
+  /* Badges menores em mobile */
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem !important;
+  }
+  
+  /* Botões menores */
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Títulos menores */
+  h3 {
+    font-size: 1.25rem !important;
+  }
+  
+  h4 {
+    font-size: 1.1rem !important;
+  }
+  
+  h5 {
+    font-size: 1rem !important;
+  }
+  
+  /* Padding reduzido */
+  .px-4 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .py-4 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+  
+  /* Cards menores */
+  .card-body {
+    padding: 1rem !important;
+  }
+  
+  /* Gráficos menores */
+  [style*="height: 350px"] {
+    height: 250px !important;
+    min-height: 200px !important;
+  }
+  
+  /* Kanban columns menores */
+  [style*="min-width: 280px"] {
+    min-width: 200px !important;
+  }
+}
+
+/* Ajustes para tablets */
+@media (min-width: 577px) and (max-width: 991px) {
+  .card-body h2 {
+    font-size: 2rem !important;
+  }
+  
+  [style*="height: 350px"] {
+    height: 300px !important;
+  }
+}
