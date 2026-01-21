@@ -16,7 +16,7 @@ export interface InventoryItem {
   providedIn: 'root',
 })
 export class InventoryService {
-  private readonly STORAGE_KEY = 'tasky_inventory';
+  private readonly STORAGE_KEY = 'axis_inventory';
   
   private items: InventoryItem[] = this.carregarDoLocalStorage();
   

@@ -5,10 +5,12 @@ import { KanbanBoard } from './kanban-board/kanban-board';
 import { CreateTicket } from './create-ticket/create-ticket';
 import { TicketDetail } from './ticket-detail/ticket-detail';
 import { Inventory } from './inventory/inventory';
+import { LoginComponent } from './pages/login/login.component';
 
 export const routes: Routes = [
   { path: '', component: ServiceDeskDashboard },
   { path: 'dashboard', component: ServiceDeskDashboard },
+  { path: 'login', component: LoginComponent },
   { path: 'tickets', component: TicketList },
   { path: 'tickets/create', component: CreateTicket },
   { path: 'tickets/:id', component: TicketDetail },

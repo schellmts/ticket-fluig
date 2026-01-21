@@ -49,7 +49,7 @@ export interface Ticket {
   providedIn: 'root',
 })
 export class TicketService {
-  private readonly STORAGE_KEY = 'tasky_tickets';
+  private readonly STORAGE_KEY = 'axis_tickets';
   
   private tickets: Ticket[] = this.carregarDoLocalStorage();
   
@@ -63,6 +63,7 @@ export class TicketService {
       }
     }
     // Se não houver dados salvos, retorna os dados padrão
+    // Datas distribuídas nos últimos 7 dias para popular gráficos
     return [
     {
       id: '1',
@@ -72,8 +73,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Hardware',
       criadoPor: 'João Silva',
-      dataCriacao: '2025-12-02 08:00',
-      dataAtualizacao: '2025-12-02 08:00'
+      dataCriacao: '2026-01-19 08:00',
+      dataAtualizacao: '2026-01-19 08:00'
     },
     {
       id: '2',
@@ -83,8 +84,8 @@ export class TicketService {
       status: 'Em Andamento',
       categoria: 'Acesso',
       criadoPor: 'Maria Santos',
-      dataCriacao: '2025-12-02 07:30',
-      dataAtualizacao: '2025-12-02 10:22'
+      dataCriacao: '2026-01-19 07:30',
+      dataAtualizacao: '2026-01-19 10:22'
     },
     {
       id: '3',
@@ -94,8 +95,8 @@ export class TicketService {
       status: 'Aguardando',
       categoria: 'Hardware',
       criadoPor: 'Pedro Costa',
-      dataCriacao: '2025-12-01 14:20',
-      dataAtualizacao: '2025-12-01 16:45'
+      dataCriacao: '2026-01-18 14:20',
+      dataAtualizacao: '2026-01-18 16:45'
     },
     {
       id: '4',
@@ -105,8 +106,8 @@ export class TicketService {
       status: 'Em Andamento',
       categoria: 'Rede',
       criadoPor: 'Ana Oliveira',
-      dataCriacao: '2025-12-02 07:00',
-      dataAtualizacao: '2025-12-02 11:30'
+      dataCriacao: '2026-01-19 07:00',
+      dataAtualizacao: '2026-01-19 11:30'
     },
     {
       id: '5',
@@ -116,8 +117,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Software',
       criadoPor: 'Carlos Mendes',
-      dataCriacao: '2025-12-02 10:15',
-      dataAtualizacao: '2025-12-02 10:15'
+      dataCriacao: '2026-01-17 10:15',
+      dataAtualizacao: '2026-01-17 10:15'
     },
     {
       id: '6',
@@ -127,9 +128,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Acesso',
       criadoPor: 'Fernanda Lima',
-      dataCriacao: '2025-12-01 09:00',
-      dataAtualizacao: '2025-12-01 10:30',
-      dataResolucao: '2025-12-01 10:30'
+      dataCriacao: '2026-01-18 09:00',
+      dataAtualizacao: '2026-01-18 10:30',
+      dataResolucao: '2026-01-18 10:30'
     },
     {
       id: '7',
@@ -139,8 +140,8 @@ export class TicketService {
       status: 'Em Andamento',
       categoria: 'Rede',
       criadoPor: 'Roberto Alves',
-      dataCriacao: '2025-12-02 08:45',
-      dataAtualizacao: '2025-12-02 12:00'
+      dataCriacao: '2026-01-17 08:45',
+      dataAtualizacao: '2026-01-17 12:00'
     },
     {
       id: '8',
@@ -150,8 +151,8 @@ export class TicketService {
       status: 'Aguardando',
       categoria: 'Hardware',
       criadoPor: 'Juliana Ferreira',
-      dataCriacao: '2025-11-30 15:30',
-      dataAtualizacao: '2025-12-01 09:15'
+      dataCriacao: '2026-01-16 15:30',
+      dataAtualizacao: '2026-01-17 09:15'
     },
     {
       id: '9',
@@ -161,8 +162,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Software',
       criadoPor: 'Lucas Martins',
-      dataCriacao: '2025-12-02 09:20',
-      dataAtualizacao: '2025-12-02 09:20'
+      dataCriacao: '2026-01-19 09:20',
+      dataAtualizacao: '2026-01-19 09:20'
     },
     {
       id: '10',
@@ -172,9 +173,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Hardware',
       criadoPor: 'Patricia Souza',
-      dataCriacao: '2025-12-01 11:00',
-      dataAtualizacao: '2025-12-01 15:00',
-      dataResolucao: '2025-12-01 15:00'
+      dataCriacao: '2026-01-18 11:00',
+      dataAtualizacao: '2026-01-18 15:00',
+      dataResolucao: '2026-01-18 15:00'
     },
     {
       id: '11',
@@ -184,8 +185,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Rede',
       criadoPor: 'Ricardo Pereira',
-      dataCriacao: '2025-12-02 06:30',
-      dataAtualizacao: '2025-12-02 06:30'
+      dataCriacao: '2026-01-19 06:30',
+      dataAtualizacao: '2026-01-19 06:30'
     },
     {
       id: '12',
@@ -195,8 +196,8 @@ export class TicketService {
       status: 'Em Andamento',
       categoria: 'Acesso',
       criadoPor: 'Sandra Costa',
-      dataCriacao: '2025-12-01 16:00',
-      dataAtualizacao: '2025-12-02 08:00'
+      dataCriacao: '2026-01-18 16:00',
+      dataAtualizacao: '2026-01-19 08:00'
     },
     {
       id: '13',
@@ -206,9 +207,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Software',
       criadoPor: 'Thiago Almeida',
-      dataCriacao: '2025-11-30 10:00',
-      dataAtualizacao: '2025-11-30 14:30',
-      dataResolucao: '2025-11-30 14:30'
+      dataCriacao: '2026-01-16 10:00',
+      dataAtualizacao: '2026-01-16 14:30',
+      dataResolucao: '2026-01-16 14:30'
     },
     {
       id: '14',
@@ -218,8 +219,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Hardware',
       criadoPor: 'Vanessa Rocha',
-      dataCriacao: '2025-12-02 11:00',
-      dataAtualizacao: '2025-12-02 11:00'
+      dataCriacao: '2026-01-17 11:00',
+      dataAtualizacao: '2026-01-17 11:00'
     },
     {
       id: '15',
@@ -229,8 +230,8 @@ export class TicketService {
       status: 'Aguardando',
       categoria: 'Rede',
       criadoPor: 'Wagner Silva',
-      dataCriacao: '2025-12-01 13:00',
-      dataAtualizacao: '2025-12-01 15:00'
+      dataCriacao: '2026-01-18 13:00',
+      dataAtualizacao: '2026-01-18 15:00'
     },
     {
       id: '16',
@@ -240,9 +241,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Acesso',
       criadoPor: 'Yara Mendes',
-      dataCriacao: '2025-11-29 08:00',
-      dataAtualizacao: '2025-11-29 09:15',
-      dataResolucao: '2025-11-29 09:15'
+      dataCriacao: '2026-01-15 08:00',
+      dataAtualizacao: '2026-01-15 09:15',
+      dataResolucao: '2026-01-15 09:15'
     },
     {
       id: '17',
@@ -252,8 +253,8 @@ export class TicketService {
       status: 'Em Andamento',
       categoria: 'Software',
       criadoPor: 'Zeca Santos',
-      dataCriacao: '2025-12-02 05:00',
-      dataAtualizacao: '2025-12-02 10:00'
+      dataCriacao: '2026-01-19 05:00',
+      dataAtualizacao: '2026-01-19 10:00'
     },
     {
       id: '18',
@@ -263,8 +264,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Hardware',
       criadoPor: 'Amanda Lima',
-      dataCriacao: '2025-12-02 12:30',
-      dataAtualizacao: '2025-12-02 12:30'
+      dataCriacao: '2026-01-17 12:30',
+      dataAtualizacao: '2026-01-17 12:30'
     },
     {
       id: '19',
@@ -274,9 +275,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Rede',
       criadoPor: 'Bruno Oliveira',
-      dataCriacao: '2025-12-01 07:00',
-      dataAtualizacao: '2025-12-01 11:00',
-      dataResolucao: '2025-12-01 11:00'
+      dataCriacao: '2026-01-18 07:00',
+      dataAtualizacao: '2026-01-18 11:00',
+      dataResolucao: '2026-01-18 11:00'
     },
     {
       id: '20',
@@ -286,8 +287,8 @@ export class TicketService {
       status: 'Aguardando',
       categoria: 'Software',
       criadoPor: 'Camila Ferreira',
-      dataCriacao: '2025-11-28 10:00',
-      dataAtualizacao: '2025-11-29 09:00'
+      dataCriacao: '2026-01-14 10:00',
+      dataAtualizacao: '2026-01-15 09:00'
     },
     {
       id: '21',
@@ -297,8 +298,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Acesso',
       criadoPor: 'Daniel Rodrigues',
-      dataCriacao: '2025-12-02 13:00',
-      dataAtualizacao: '2025-12-02 13:00'
+      dataCriacao: '2026-01-16 13:00',
+      dataAtualizacao: '2026-01-16 13:00'
     },
     {
       id: '22',
@@ -308,8 +309,8 @@ export class TicketService {
       status: 'Em Andamento',
       categoria: 'Hardware',
       criadoPor: 'Eduarda Alves',
-      dataCriacao: '2025-12-02 09:00',
-      dataAtualizacao: '2025-12-02 14:00'
+      dataCriacao: '2026-01-17 09:00',
+      dataAtualizacao: '2026-01-17 14:00'
     },
     {
       id: '23',
@@ -319,9 +320,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Rede',
       criadoPor: 'Felipe Costa',
-      dataCriacao: '2025-12-01 06:00',
-      dataAtualizacao: '2025-12-01 10:00',
-      dataResolucao: '2025-12-01 10:00'
+      dataCriacao: '2026-01-18 06:00',
+      dataAtualizacao: '2026-01-18 10:00',
+      dataResolucao: '2026-01-18 10:00'
     },
     {
       id: '24',
@@ -331,8 +332,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Software',
       criadoPor: 'Gabriela Martins',
-      dataCriacao: '2025-12-02 14:00',
-      dataAtualizacao: '2025-12-02 14:00'
+      dataCriacao: '2026-01-19 14:00',
+      dataAtualizacao: '2026-01-19 14:00'
     },
     {
       id: '25',
@@ -342,8 +343,8 @@ export class TicketService {
       status: 'Aguardando',
       categoria: 'Acesso',
       criadoPor: 'Henrique Souza',
-      dataCriacao: '2025-12-01 12:00',
-      dataAtualizacao: '2025-12-01 16:00'
+      dataCriacao: '2026-01-18 12:00',
+      dataAtualizacao: '2026-01-18 16:00'
     },
     {
       id: '26',
@@ -353,8 +354,8 @@ export class TicketService {
       status: 'Em Andamento',
       categoria: 'Hardware',
       criadoPor: 'Isabela Rocha',
-      dataCriacao: '2025-12-02 04:00',
-      dataAtualizacao: '2025-12-02 11:00'
+      dataCriacao: '2026-01-19 04:00',
+      dataAtualizacao: '2026-01-19 11:00'
     },
     {
       id: '27',
@@ -364,9 +365,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Software',
       criadoPor: 'João Pedro',
-      dataCriacao: '2025-11-30 09:00',
-      dataAtualizacao: '2025-11-30 10:30',
-      dataResolucao: '2025-11-30 10:30'
+      dataCriacao: '2026-01-16 09:00',
+      dataAtualizacao: '2026-01-16 10:30',
+      dataResolucao: '2026-01-16 10:30'
     },
     {
       id: '28',
@@ -376,8 +377,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Rede',
       criadoPor: 'Karina Silva',
-      dataCriacao: '2025-12-02 15:00',
-      dataAtualizacao: '2025-12-02 15:00'
+      dataCriacao: '2026-01-17 15:00',
+      dataAtualizacao: '2026-01-17 15:00'
     },
     {
       id: '29',
@@ -387,8 +388,8 @@ export class TicketService {
       status: 'Aguardando',
       categoria: 'Acesso',
       criadoPor: 'Leonardo Mendes',
-      dataCriacao: '2025-12-01 08:00',
-      dataAtualizacao: '2025-12-01 12:00'
+      dataCriacao: '2026-01-18 08:00',
+      dataAtualizacao: '2026-01-18 12:00'
     },
     {
       id: '30',
@@ -398,9 +399,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Hardware',
       criadoPor: 'Mariana Costa',
-      dataCriacao: '2025-11-29 11:00',
-      dataAtualizacao: '2025-11-29 13:00',
-      dataResolucao: '2025-11-29 13:00'
+      dataCriacao: '2026-01-15 11:00',
+      dataAtualizacao: '2026-01-15 13:00',
+      dataResolucao: '2026-01-15 13:00'
     },
     {
       id: '31',
@@ -410,8 +411,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Software',
       criadoPor: 'Nicolas Almeida',
-      dataCriacao: '2025-12-02 16:00',
-      dataAtualizacao: '2025-12-02 16:00'
+      dataCriacao: '2026-01-16 16:00',
+      dataAtualizacao: '2026-01-16 16:00'
     },
     {
       id: '32',
@@ -421,8 +422,8 @@ export class TicketService {
       status: 'Em Andamento',
       categoria: 'Rede',
       criadoPor: 'Olivia Rodrigues',
-      dataCriacao: '2025-12-02 03:00',
-      dataAtualizacao: '2025-12-02 09:00'
+      dataCriacao: '2026-01-19 03:00',
+      dataAtualizacao: '2026-01-19 09:00'
     },
     {
       id: '33',
@@ -432,9 +433,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Hardware',
       criadoPor: 'Paulo Lima',
-      dataCriacao: '2025-12-01 05:00',
-      dataAtualizacao: '2025-12-01 09:00',
-      dataResolucao: '2025-12-01 09:00'
+      dataCriacao: '2026-01-18 05:00',
+      dataAtualizacao: '2026-01-18 09:00',
+      dataResolucao: '2026-01-18 09:00'
     },
     {
       id: '34',
@@ -444,8 +445,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Acesso',
       criadoPor: 'Quenia Oliveira',
-      dataCriacao: '2025-12-02 17:00',
-      dataAtualizacao: '2025-12-02 17:00'
+      dataCriacao: '2026-01-19 17:00',
+      dataAtualizacao: '2026-01-19 17:00'
     },
     {
       id: '35',
@@ -455,8 +456,8 @@ export class TicketService {
       status: 'Aguardando',
       categoria: 'Software',
       criadoPor: 'Rafael Ferreira',
-      dataCriacao: '2025-11-27 14:00',
-      dataAtualizacao: '2025-11-28 10:00'
+      dataCriacao: '2026-01-13 14:00',
+      dataAtualizacao: '2026-01-14 10:00'
     },
     {
       id: '36',
@@ -466,8 +467,8 @@ export class TicketService {
       status: 'Em Andamento',
       categoria: 'Hardware',
       criadoPor: 'Sabrina Alves',
-      dataCriacao: '2025-12-02 02:00',
-      dataAtualizacao: '2025-12-02 08:00'
+      dataCriacao: '2026-01-19 02:00',
+      dataAtualizacao: '2026-01-19 08:00'
     },
     {
       id: '37',
@@ -477,9 +478,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Rede',
       criadoPor: 'Tiago Rocha',
-      dataCriacao: '2025-11-30 08:00',
-      dataAtualizacao: '2025-11-30 09:45',
-      dataResolucao: '2025-11-30 09:45'
+      dataCriacao: '2026-01-16 08:00',
+      dataAtualizacao: '2026-01-16 09:45',
+      dataResolucao: '2026-01-16 09:45'
     },
     {
       id: '38',
@@ -489,8 +490,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Acesso',
       criadoPor: 'Ursula Santos',
-      dataCriacao: '2025-12-02 18:00',
-      dataAtualizacao: '2025-12-02 18:00'
+      dataCriacao: '2026-01-17 18:00',
+      dataAtualizacao: '2026-01-17 18:00'
     },
     {
       id: '39',
@@ -500,8 +501,8 @@ export class TicketService {
       status: 'Aguardando',
       categoria: 'Software',
       criadoPor: 'Victor Martins',
-      dataCriacao: '2025-12-01 10:00',
-      dataAtualizacao: '2025-12-01 14:00'
+      dataCriacao: '2026-01-18 10:00',
+      dataAtualizacao: '2026-01-18 14:00'
     },
     {
       id: '40',
@@ -511,8 +512,8 @@ export class TicketService {
       status: 'Em Andamento',
       categoria: 'Rede',
       criadoPor: 'Wanessa Costa',
-      dataCriacao: '2025-12-02 01:00',
-      dataAtualizacao: '2025-12-02 07:00'
+      dataCriacao: '2026-01-19 01:00',
+      dataAtualizacao: '2026-01-19 07:00'
     },
     {
       id: '41',
@@ -522,9 +523,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Acesso',
       criadoPor: 'Xavier Lima',
-      dataCriacao: '2025-11-29 12:00',
-      dataAtualizacao: '2025-11-29 14:30',
-      dataResolucao: '2025-11-29 14:30'
+      dataCriacao: '2026-01-15 12:00',
+      dataAtualizacao: '2026-01-15 14:30',
+      dataResolucao: '2026-01-15 14:30'
     },
     {
       id: '42',
@@ -534,8 +535,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Hardware',
       criadoPor: 'Yasmin Mendes',
-      dataCriacao: '2025-12-02 19:00',
-      dataAtualizacao: '2025-12-02 19:00'
+      dataCriacao: '2026-01-16 19:00',
+      dataAtualizacao: '2026-01-16 19:00'
     },
     {
       id: '43',
@@ -545,8 +546,8 @@ export class TicketService {
       status: 'Aguardando',
       categoria: 'Software',
       criadoPor: 'Zacarias Almeida',
-      dataCriacao: '2025-12-01 11:00',
-      dataAtualizacao: '2025-12-01 15:00'
+      dataCriacao: '2026-01-18 11:00',
+      dataAtualizacao: '2026-01-18 15:00'
     },
     {
       id: '44',
@@ -556,8 +557,8 @@ export class TicketService {
       status: 'Em Andamento',
       categoria: 'Rede',
       criadoPor: 'Adriana Rodrigues',
-      dataCriacao: '2025-12-02 00:00',
-      dataAtualizacao: '2025-12-02 06:00'
+      dataCriacao: '2026-01-19 00:00',
+      dataAtualizacao: '2026-01-19 06:00'
     },
     {
       id: '45',
@@ -567,9 +568,9 @@ export class TicketService {
       status: 'Resolvido',
       categoria: 'Rede',
       criadoPor: 'Bernardo Ferreira',
-      dataCriacao: '2025-12-01 04:00',
-      dataAtualizacao: '2025-12-01 08:00',
-      dataResolucao: '2025-12-01 08:00'
+      dataCriacao: '2026-01-17 04:00',
+      dataAtualizacao: '2026-01-17 08:00',
+      dataResolucao: '2026-01-17 08:00'
     },
     {
       id: '46',
@@ -579,8 +580,8 @@ export class TicketService {
       status: 'Aberto',
       categoria: 'Acesso',
       criadoPor: 'Carla Souza',
-      dataCriacao: '2025-12-02 20:00',
-      dataAtualizacao: '2025-12-02 20:00'
+      dataCriacao: '2026-01-16 20:00',
+      dataAtualizacao: '2026-01-16 20:00'
     },
     {
       id: '47',
@@ -590,8 +591,8 @@ export class TicketService {
       status: 'Aguardando',
       categoria: 'Software',
       criadoPor: 'Diego Rocha',
-      dataCriacao: '2025-11-26 15:00',
-      dataAtualizacao: '2025-11-27 10:00'
+      dataCriacao: '2026-01-13 15:00',
+      dataAtualizacao: '2026-01-14 10:00'
     }
     ];
   }
