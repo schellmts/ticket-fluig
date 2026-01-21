@@ -5,8 +5,8 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-layout',
   imports: [CommonModule, RouterModule],
-  templateUrl: './layout.html',
-  styleUrl: './layout.css',
+  templateUrl: './layout.component.html',
+  styleUrl: './layout.component.css',
 })
 export class Layout {
   sidebarOpen = false;

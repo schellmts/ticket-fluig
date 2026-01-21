@@ -1,19 +1,19 @@
 import { Routes } from '@angular/router';
-import { ServiceDeskDashboard } from './service-desk-dashboard/service-desk-dashboard';
-import { TicketList } from './ticket-list/ticket-list';
-import { KanbanBoard } from './kanban-board/kanban-board';
-import { CreateTicket } from './create-ticket/create-ticket';
-import { TicketDetail } from './ticket-detail/ticket-detail';
-import { Inventory } from './inventory/inventory';
+import { ServiceDeskDashboardComponent } from './pages/service-desk-dashboard/service-desk-dashboard.component';
+import { TicketListComponent } from './pages/ticket-list/ticket-list.component';
+import { KanbanBoardComponent } from './pages/kanban-board/kanban-board.component';
+import { CreateTicketComponent } from './pages/create-ticket/create-ticket.component';
+import { TicketDetailComponent } from './pages/ticket-detail/ticket-detail.component';
+import { TextReviewerComponent } from './pages/text-reviewer/text-reviewer.component';
 import { LoginComponent } from './pages/login/login.component';
 
 export const routes: Routes = [
-  { path: '', component: ServiceDeskDashboard },
-  { path: 'dashboard', component: ServiceDeskDashboard },
+  { path: '', component: ServiceDeskDashboardComponent },
+  { path: 'dashboard', component: ServiceDeskDashboardComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'tickets', component: TicketList },
-  { path: 'tickets/create', component: CreateTicket },
-  { path: 'tickets/:id', component: TicketDetail },
-  { path: 'kanban', component: KanbanBoard },
-  { path: 'inventory', component: Inventory }
+  { path: 'tickets', component: TicketListComponent },
+  { path: 'tickets/create', component: CreateTicketComponent },
+  { path: 'tickets/:id', component: TicketDetailComponent },
+  { path: 'kanban', component: KanbanBoardComponent },
+  { path: 'text-reviewer', component: TextReviewerComponent }
 ];

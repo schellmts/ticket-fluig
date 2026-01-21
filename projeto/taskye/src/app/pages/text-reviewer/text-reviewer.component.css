@@ -1,0 +1,69 @@
+/* Estilos customizados para complementar Bootstrap */
+
+.text-reviewer-container {
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 80px);
+}
+
+.card {
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+/* Animação de fade-in para resultados */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card.animate-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Estilo para textarea */
+textarea.form-control {
+  font-family: inherit;
+}
+
+/* Estilo para select customizado */
+.form-select {
+  cursor: pointer;
+}
+
+/* Badge de validação */
+.badge.bg-success {
+  padding: 0.25rem 0.5rem;
+}
+
+/* Ícones SVG */
+svg {
+  flex-shrink: 0;
+}
+
+/* Espaçamento entre itens da lista */
+.list-unstyled li {
+  margin-bottom: 0.5rem;
+}
+
+.list-unstyled li:last-child {
+  margin-bottom: 0;
+}

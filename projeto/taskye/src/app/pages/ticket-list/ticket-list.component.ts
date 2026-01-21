@@ -2,12 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { TicketService, Ticket } from '../../services/ticket';
-import { LayoutComponent } from '../../layouts/layout.component';
+import { TicketService } from '../../services/ticket';
+import { Ticket } from '../../interfaces/ticket.interface';
+import { Layout } from '../../components/layout/layout.component';
 
 @Component({
   selector: 'app-ticket-list',
-  imports: [CommonModule, FormsModule, RouterModule, LayoutComponent],
+  imports: [CommonModule, FormsModule, RouterModule, Layout],
   templateUrl: './ticket-list.component.html'
 })
 export class TicketListComponent implements OnInit {

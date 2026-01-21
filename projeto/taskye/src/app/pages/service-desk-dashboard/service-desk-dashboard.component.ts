@@ -1,36 +1,43 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import Swal from 'sweetalert2';
-import { TicketService, Ticket } from '../../services/ticket';
-import { LayoutComponent } from '../../layouts/layout.component';
+import { TicketService } from '../../services/ticket';
+import { Ticket } from '../../interfaces/ticket.interface';
+import { Layout } from '../../components/layout/layout.component';
 
 @Component({
   selector: 'app-service-desk-dashboard',
-  imports: [CommonModule, RouterModule, FormsModule, NgxEchartsModule, LayoutComponent],
-  templateUrl: './service-desk-dashboard.component.html'
+  imports: [CommonModule, RouterModule, FormsModule, NgxEchartsModule, Layout],
+  templateUrl: './service-desk-dashboard.component.html',
+  styleUrl: './service-desk-dashboard.component.css'
 })
-export class ServiceDeskDashboardComponent implements OnInit {
+export class ServiceDeskDashboardComponent {
   private ticketService = inject(TicketService);
-
-  ngOnInit() {
-    // Aplicar filtro padrão ao carregar
-    this.aplicarFiltro();
-  }
 
   // Filtros selecionados (ainda não aplicados)
   tipoFiltroSelecionado: string = 'Todos Tickets';
   prioridadeFiltroSelecionado: string = 'Todas';
   modoDataSelecionado: string = 'Tempo Real';
-  periodoSelecionado: string = 'Semana';
+  periodoSelecionado: string = 'Hoje';
 
   // Filtros aplicados (usados para calcular métricas)
   tipoFiltroAplicado: string = 'Todos Tickets';
   prioridadeFiltroAplicado: string = 'Todas';
-  periodoAplicado: string = 'Semana';
+  periodoAplicado: string = 'Hoje';
+
+  // Gráficos inicializados como propriedades
+  chartDistribuicao: EChartsOption;
+  chartAtividades: EChartsOption;
+
+  constructor() {
+    // Inicializar gráficos no construtor
+    this.chartDistribuicao = this.initializeChartDistribuicao();
+    this.chartAtividades = this.initializeChartAtividades();
+  }
 
   get tickets(): Ticket[] {
     return this.ticketService.getTickets();
@@ -54,27 +61,20 @@ export class ServiceDeskDashboardComponent implements OnInit {
     // Filtro por período (data)
     if (this.periodoAplicado === 'Hoje') {
       const hoje = new Date().toISOString().split('T')[0];
-      filtrados = filtrados.filter(t => {
-        const dataTicket = t.dataCriacao.split(' ')[0];
-        return dataTicket === hoje;
-      });
+      filtrados = filtrados.filter(t => t.dataCriacao.startsWith(hoje));
     } else if (this.periodoAplicado === 'Semana') {
-      const hoje = new Date();
       const umaSemanaAtras = new Date();
       umaSemanaAtras.setDate(umaSemanaAtras.getDate() - 7);
       filtrados = filtrados.filter(t => {
-        const dataTicketStr = t.dataCriacao.split(' ')[0];
-        const dataTicket = new Date(dataTicketStr + 'T00:00:00');
-        return dataTicket >= umaSemanaAtras && dataTicket <= hoje;
+        const dataTicket = new Date(t.dataCriacao);
+        return dataTicket >= umaSemanaAtras;
       });
     } else if (this.periodoAplicado === 'Mês') {
-      const hoje = new Date();
       const umMesAtras = new Date();
       umMesAtras.setMonth(umMesAtras.getMonth() - 1);
       filtrados = filtrados.filter(t => {
-        const dataTicketStr = t.dataCriacao.split(' ')[0];
-        const dataTicket = new Date(dataTicketStr + 'T00:00:00');
-        return dataTicket >= umMesAtras && dataTicket <= hoje;
+        const dataTicket = new Date(t.dataCriacao);
+        return dataTicket >= umMesAtras;
       });
     }
 
@@ -119,21 +119,15 @@ export class ServiceDeskDashboardComponent implements OnInit {
 
     const totalFiltrado = this.ticketsFiltrados.length;
     
-    // Não mostrar toast se for aplicação automática no ngOnInit
-    if (totalFiltrado > 0) {
-      Swal.fire({
-        title: 'Filtros aplicados!',
-        text: `Foram encontrados ${totalFiltrado} ticket(s) com os filtros selecionados.`,
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#1e3a5f',
-        timer: 2000,
-        timerProgressBar: true,
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false
-      });
-    }
+    Swal.fire({
+      title: 'Filtros aplicados!',
+      text: `Foram encontrados ${totalFiltrado} ticket(s) com os filtros selecionados.`,
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#1e3a5f',
+      timer: 2000,
+      timerProgressBar: true
+    });
   }
 
   filtrarPorTipo(tipo: string) {
@@ -141,42 +135,23 @@ export class ServiceDeskDashboardComponent implements OnInit {
     this.aplicarFiltro();
   }
 
-  // Gráfico de Distribuição por Categoria (Donut)
-  get chartDistribuicao(): EChartsOption {
-    const ticketsFiltrados = this.ticketsFiltrados;
-    // Ordem exata da legenda: Hardware, Acesso, Software, Outros, Rede
+  get temDadosParaGrafico(): boolean {
+    return true; // Sempre mostrar gráficos com dados fixos
+  }
+
+  // Gráfico de Distribuição por Categoria (Donut) - Dados Fixos
+  private initializeChartDistribuicao(): EChartsOption {
+    // Dados fixos: Hardware, Acesso, Software, Outros, Rede
     const categorias = ['Hardware', 'Acesso', 'Software', 'Outros', 'Rede'];
-    // Cores correspondentes: bg-primary (#0d6efd), bg-info (#0dcaf0), roxo (#6f42c1), bg-secondary (#6c757d), bg-warning (#ffc107)
     const cores = ['#0d6efd', '#0dcaf0', '#6f42c1', '#6c757d', '#ffc107'];
+    // Valores fixos: 35, 28, 22, 15, 20
+    const valoresFixos = [35, 28, 22, 15, 20];
     
     const dados = categorias.map((cat, index) => ({
-      value: ticketsFiltrados.filter(t => t.categoria === cat).length,
+      value: valoresFixos[index],
       name: cat,
       itemStyle: { color: cores[index] }
     }));
-
-    const dadosComValor = dados.filter(d => d.value > 0);
-    
-    // Se não houver dados, mostrar gráfico vazio mas renderizado
-    if (dadosComValor.length === 0) {
-      return {
-        textStyle: {
-          fontFamily: 'Poppins, sans-serif'
-        },
-        tooltip: {
-          trigger: 'item'
-        },
-        series: [
-          {
-            name: 'Distribuição por Categoria',
-            type: 'pie',
-            radius: ['40%', '70%'],
-            data: [{ value: 0, name: 'Sem dados' }],
-            itemStyle: { color: '#e0e0e0' }
-          }
-        ]
-      };
-    }
 
     return {
       textStyle: {
@@ -215,53 +190,20 @@ export class ServiceDeskDashboardComponent implements OnInit {
               fontFamily: 'Poppins, sans-serif'
             }
           },
-          data: dadosComValor
+          data: dados
         }
       ]
     };
   }
 
-  get temDadosParaGrafico(): boolean {
-    // Sempre mostrar gráficos, mesmo sem dados
-    return true;
-  }
-
-  // Gráfico de Atividades da Semana (Line Chart)
-  get chartAtividades(): EChartsOption {
-    const ticketsFiltrados = this.ticketsFiltrados;
+  // Gráfico de Atividades da Semana (Line Chart) - Dados Fixos
+  private initializeChartAtividades(): EChartsOption {
+    const diasSemana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
     
-    // Mapear dias da semana com base nas datas dos tickets
-    const hoje = new Date();
-    const diasSemanaLabels: string[] = [];
-    const tarefasConcluidas: number[] = [];
-    const ticketsAbertos: number[] = [];
-    const ticketsEmAndamento: number[] = [];
-
-    // Calcular dados dos últimos 7 dias
-    for (let i = 6; i >= 0; i--) {
-      const data = new Date(hoje);
-      data.setDate(data.getDate() - i);
-      const dataStr = data.toISOString().split('T')[0];
-      
-      // Obter dia da semana
-      const dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-      diasSemanaLabels.push(dias[data.getDay()]);
-      
-      // Filtrar tickets do dia
-      const ticketsDoDia = ticketsFiltrados.filter(t => {
-        const ticketData = t.dataCriacao.split(' ')[0];
-        return ticketData === dataStr;
-      });
-      
-      tarefasConcluidas.push(ticketsDoDia.filter(t => t.status === 'Resolvido').length);
-      ticketsAbertos.push(ticketsDoDia.filter(t => t.status === 'Aberto').length);
-      ticketsEmAndamento.push(ticketsDoDia.filter(t => t.status === 'Em Andamento').length);
-    }
-
-    // Calcular máximo para yAxis
-    const todosValores = [...tarefasConcluidas, ...ticketsAbertos, ...ticketsEmAndamento];
-    const maxValue = Math.max(...todosValores, 1); // Mínimo de 1
-    const maxYAxis = maxValue > 0 ? Math.ceil(maxValue / 5) * 5 : 10; // Mínimo de 10 se não houver dados
+    // Dados fixos para os 7 dias
+    const tarefasConcluidas: number[] = [38, 42, 45, 40, 52, 35, 30];
+    const ticketsAbertos: number[] = [45, 48, 50, 47, 51, 43, 40];
+    const ticketsResolvidos: number[] = [40, 44, 48, 42, 52, 38, 35];
 
     return {
       textStyle: {
@@ -277,32 +219,30 @@ export class ServiceDeskDashboardComponent implements OnInit {
         }
       },
       legend: {
-        data: ['Tarefas Concluídas', 'Tickets Abertos', 'Em Andamento'],
+        data: ['Tarefas Concluídas', 'Tickets Abertos', 'Tickets Resolvidos'],
         bottom: 0,
         textStyle: {
-          fontFamily: 'Poppins, sans-serif',
-          fontSize: 12
+          fontFamily: 'Poppins, sans-serif'
         }
       },
       grid: {
         left: '3%',
         right: '4%',
-        bottom: '20%',
+        bottom: '15%',
         containLabel: true
       },
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: diasSemanaLabels,
+        data: diasSemana,
         axisLabel: {
           fontFamily: 'Poppins, sans-serif'
         }
       },
       yAxis: {
         type: 'value',
-        min: 0,
-        max: maxYAxis,
-        interval: Math.max(1, Math.ceil(maxYAxis / 5)),
+        max: 60,
+        interval: 15,
         axisLabel: {
           fontFamily: 'Poppins, sans-serif'
         }
@@ -314,45 +254,36 @@ export class ServiceDeskDashboardComponent implements OnInit {
           data: tarefasConcluidas,
           lineStyle: {
             type: 'dashed',
-            color: '#28a745',
-            width: 2
+            color: '#28a745'
           },
           itemStyle: {
             color: '#28a745'
           },
-          smooth: true,
-          symbol: 'circle',
-          symbolSize: 6
+          smooth: true
         },
         {
           name: 'Tickets Abertos',
           type: 'line',
           data: ticketsAbertos,
           lineStyle: {
-            color: '#1e3a5f',
-            width: 2
+            color: '#1e3a5f'
           },
           itemStyle: {
             color: '#1e3a5f'
           },
-          smooth: true,
-          symbol: 'circle',
-          symbolSize: 6
+          smooth: true
         },
         {
-          name: 'Em Andamento',
+          name: 'Tickets Resolvidos',
           type: 'line',
-          data: ticketsEmAndamento,
+          data: ticketsResolvidos,
           lineStyle: {
-            color: '#0dcaf0',
-            width: 2
+            color: '#0dcaf0'
           },
           itemStyle: {
             color: '#0dcaf0'
           },
-          smooth: true,
-          symbol: 'circle',
-          symbolSize: 6
+          smooth: true
         }
       ]
     };

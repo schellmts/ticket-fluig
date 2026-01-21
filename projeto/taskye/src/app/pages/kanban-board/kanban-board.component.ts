@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { TicketService, Ticket } from '../../services/ticket';
-import { LayoutComponent } from '../../layouts/layout.component';
+import { TicketService } from '../../services/ticket';
+import { Ticket } from '../../interfaces/ticket.interface';
+import { Layout } from '../../components/layout/layout.component';
 
 @Component({
   selector: 'app-kanban-board',
-  imports: [CommonModule, RouterModule, FormsModule, DragDropModule, LayoutComponent],
+  imports: [CommonModule, RouterModule, FormsModule, DragDropModule, Layout],
   templateUrl: './kanban-board.component.html',
   styleUrl: './kanban-board.component.css',
 })
