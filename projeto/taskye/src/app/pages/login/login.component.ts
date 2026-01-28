@@ -1,7 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -11,21 +13,47 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class LoginComponent {
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private authService = inject(AuthService);
   
   email: string = '';
   senha: string = '';
   mostrarSenha: boolean = false;
   lembrarMe: boolean = false;
+  loading: boolean = false;
+  error: string = '';
 
   toggleMostrarSenha() {
     this.mostrarSenha = !this.mostrarSenha;
   }
 
   onSubmit() {
-    // TODO: Implementar lógica de autenticação
-    console.log('Login:', { email: this.email, senha: this.senha, lembrarMe: this.lembrarMe });
-    
-    // Redireciona para a página inicial
-    this.router.navigate(['/']);
+    if (!this.email || !this.senha) {
+      this.error = 'Por favor, preencha todos os campos';
+      return;
+    }
+
+    this.loading = true;
+    this.error = '';
+
+    const result = this.authService.login(this.email, this.senha);
+
+    if (result.success && result.user) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Login realizado!',
+        text: `Bem-vindo, ${result.user.nome}!`,
+        confirmButtonColor: '#0d6efd',
+        timer: 1500,
+        showConfirmButton: false
+      });
+
+      // Redireciona para a URL de retorno ou dashboard
+      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      this.router.navigate([returnUrl]);
+    } else {
+      this.error = result.message || 'Erro ao fazer login';
+      this.loading = false;
+    }
   }
 }

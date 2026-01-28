@@ -47,6 +47,13 @@
             <span class="d-md-none ms-2">Revisor</span>
           </a>
         </div>
+        <div class="mb-4">
+          <a routerLink="/chat" routerLinkActive="active" class="text-white text-decoration-none sidebar-link"
+            (click)="closeSidebar()">
+            <i class="bi bi-chat-dots" style="font-size: 24px;"></i>
+            <span class="d-md-none ms-2">Assistente</span>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -75,9 +82,17 @@
                 <i class="bi bi-person-fill"></i>
               </div>
               <div class="d-none d-lg-block">
-                <div class="fw-semibold small text-truncate" style="color: #1e3a5f; max-width: 150px;">Administrador</div>
-                <div class="text-muted text-truncate" style="font-size: 0.7rem; max-width: 150px;">admin&#64;empresa.com</div>
+                @if (currentUser()) {
+                <div class="fw-semibold small text-truncate" style="color: #1e3a5f; max-width: 150px;">{{ currentUser()!.nome }}</div>
+                <div class="text-muted text-truncate" style="font-size: 0.7rem; max-width: 150px;">{{ currentUser()!.email }}</div>
+                } @else {
+                <div class="fw-semibold small text-truncate" style="color: #1e3a5f; max-width: 150px;">Usuário</div>
+                <div class="text-muted text-truncate" style="font-size: 0.7rem; max-width: 150px;">Não logado</div>
+                }
               </div>
+              <button class="btn btn-sm btn-outline-danger ms-2" (click)="logout()" title="Sair">
+                <i class="bi bi-box-arrow-right"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -118,6 +133,15 @@
         <i class="bi bi-pencil-square fs-5 mb-1"></i>
         <small class="small">Revisor</small>
       </a>
+      <a routerLink="/chat" routerLinkActive="active"
+        class="text-decoration-none d-flex flex-column align-items-center justify-content-center nav-mobile-item"
+        style="flex: 1;">
+        <i class="bi bi-chat-dots fs-5 mb-1"></i>
+        <small class="small">Assistente</small>
+      </a>
     </div>
   </nav>
+
+  <!-- Chat Flutuante -->
+  <app-floating-chat></app-floating-chat>
 </div>

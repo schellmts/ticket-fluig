@@ -1,6 +1,18 @@
 <div class="container-fluid vh-100 p-0 d-flex">
   <!-- Painel Esquerdo - Logo/Ícone (maior) -->
   <div class="d-none d-md-flex col-md-8 bg-primary text-white align-items-center justify-content-center" style="background: linear-gradient(135deg, #1e3a5f 0%, #2d4f7a 100%);">
+    <div class="text-center px-4">
+      <div class="mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.95;">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          <path d="M13 8H8"/>
+          <path d="M17 12H8"/>
+          <circle cx="18" cy="8" r="1"/>
+        </svg>
+      </div>
+      <h3 class="fw-bold mb-3" style="font-size: 2rem;">AXIS Service Desk</h3>
+      <p class="lead mb-0" style="opacity: 0.9; font-size: 1.1rem;">Sistema de Gestão de Chamados</p>
+    </div>
   </div>
 
   <!-- Painel Direito - Formulário (menor) -->
@@ -27,7 +39,7 @@
             name="email"
             placeholder="seu.email@empresa.com"
             required
-            autocomplete="email"
+            autocomplete="off"
           />
         </div>
 
@@ -45,7 +57,7 @@
               name="senha"
               placeholder="Digite sua senha"
               required
-              autocomplete="current-password"
+              autocomplete="off"
             />
             <button
               type="button"
@@ -58,10 +70,30 @@
           </div>
         </div>
 
+        <!-- Mensagem de Erro -->
+        @if (error) {
+        <div class="alert alert-danger mb-3" role="alert">
+          <small>{{ error }}</small>
+        </div>
+        }
+
         <!-- Botão de Login -->
-        <button type="submit" class="btn btn-primary w-100">
+        <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
+          @if (loading) {
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          <span>Entrando...</span>
+          } @else {
           Entrar
+          }
         </button>
+
+        <!-- Credenciais de teste -->
+        <div class="mt-4 p-3 bg-light rounded">
+          <small class="text-muted d-block mb-2 fw-semibold">Credenciais de teste:</small>
+          <small class="text-muted d-block">Admin: admin&#64;axis.com / admin123</small>
+          <small class="text-muted d-block">Usuário: user&#64;axis.com / user123</small>
+          <small class="text-muted d-block">Técnico: tecnico&#64;axis.com / tec123</small>
+        </div>
       </form>
     </div>
   </div>

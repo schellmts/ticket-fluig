@@ -26,7 +26,7 @@ export class TicketListComponent implements OnInit {
   ticketsFiltrados: Ticket[] = [];
 
   ngOnInit() {
-    this.ticketsFiltrados = [...this.tickets];
+    this.aplicarFiltros();
   }
 
   get totalTickets(): number {
@@ -73,6 +73,11 @@ export class TicketListComponent implements OnInit {
         ticket.descricao.toLowerCase().includes(this.searchTerm.toLowerCase());
       
       return matchStatus && matchPrioridade && matchSearch;
+    }).sort((a, b) => {
+      // Ordenar do mais recente para o mais antigo (por dataCriacao)
+      const dataA = new Date(a.dataCriacao).getTime();
+      const dataB = new Date(b.dataCriacao).getTime();
+      return dataB - dataA; // Ordem decrescente
     });
   }
 
