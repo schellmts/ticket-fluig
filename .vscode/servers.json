@@ -1,4 +1,17 @@
 {
 	"version": "1.0.0",
-	"configurations": []
+	"configurations": [
+		{
+			"id": "bqnhn1onptmkydnpvfmxtmd6rzbwo",
+			"name": "homol-axis",
+			"host": "186.226.60.81",
+			"ssl": false,
+			"port": 8080,
+			"username": "admin",
+			"password": "eyJpdiI6IjM4MTQ4NjRkZjhiM2RjNDkzZGI1MTFjMDBkYzU4Njg3Iiwic2FsdCI6IjA1YzQ3ZGM3MjdjNzM3ZGE1MGVlZDljZDExNTJhOTk4IiwidGV4dCI6ImRkZGEyMjU0YjYzNzc3ZTE2ZjZiYTI3MTg0N2E2YTNiIn0=",
+			"userCode": "admin",
+			"confirmExporting": false,
+			"companyId": 1
+		}
+	]
 }

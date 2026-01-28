@@ -4,58 +4,69 @@
     <div class="overlay" [class.show]="sidebarOpen" (click)="closeSidebar()"></div>
 
     <!-- Sidebar Esquerda -->
-    <div class="col-auto position-fixed start-0 top-0 sidebar-fixed" [class.show]="sidebarOpen"
-      style="background-color: #1e3a5f; height: 100vh; width: 80px; z-index: 1001;">
-      <div class="d-flex flex-column align-items-center py-4 position-relative h-100">
+    <nav class="col-auto position-fixed start-0 top-0 text-white sidebar-nav" [class.show]="sidebarOpen"
+      style="background-color: #1e3a5f; width: 80px; height: 100vh; z-index: 1001;">
+      <div class="d-flex flex-column h-100 py-3">
         <!-- Botão fechar em mobile -->
-        <button class="btn btn-link text-white d-md-none position-absolute top-0 end-0 p-2" (click)="closeSidebar()"
-          style="z-index: 1002;">
-          <i class="bi bi-x-lg fs-4"></i>
-        </button>
+        <div class="d-flex justify-content-end d-md-none mb-3 px-2">
+          <button class="btn btn-link text-white p-1" (click)="closeSidebar()" type="button">
+            <i class="bi bi-x-lg fs-5"></i>
+          </button>
+        </div>
 
-        <div class="mb-5 mt-3 mt-md-0">
-          <div class="bg-white rounded-circle d-flex align-items-center justify-content-center"
-            style="width: 50px; height: 50px;">
-            <i class="bi bi-headphones" style="color: #1e3a5f; font-size: 24px;"></i>
+        <!-- Logo -->
+        <div class="text-center mb-4 px-2">
+          <div class="bg-white bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center"
+            style="width: 48px; height: 48px;">
+            <i class="bi bi-headphones fs-4" style="color: #fff;"></i>
           </div>
         </div>
-        <div class="mb-4">
-          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-            class="text-white text-decoration-none sidebar-link" (click)="closeSidebar()">
-            <i class="bi bi-grid-3x3-gap" style="font-size: 24px;"></i>
-            <span class="d-md-none ms-2">Dashboard</span>
-          </a>
-        </div>
-        <div class="mb-4">
-          <a routerLink="/tickets" routerLinkActive="active" class="text-white text-decoration-none sidebar-link"
-            (click)="closeSidebar()">
-            <i class="bi bi-stack" style="font-size: 24px;"></i>
-            <span class="d-md-none ms-2">Tickets</span>
-          </a>
-        </div>
-        <div class="mb-4">
-          <a routerLink="/kanban" routerLinkActive="active" class="text-white text-decoration-none sidebar-link"
-            (click)="closeSidebar()">
-            <i class="bi bi-kanban" style="font-size: 24px;"></i>
-            <span class="d-md-none ms-2">Kanban</span>
-          </a>
-        </div>
-        <div class="mb-4">
-          <a routerLink="/text-reviewer" routerLinkActive="active" class="text-white text-decoration-none sidebar-link"
-            (click)="closeSidebar()">
-            <i class="bi bi-pencil-square" style="font-size: 24px;"></i>
-            <span class="d-md-none ms-2">Revisor</span>
-          </a>
-        </div>
-        <div class="mb-4">
-          <a routerLink="/chat" routerLinkActive="active" class="text-white text-decoration-none sidebar-link"
-            (click)="closeSidebar()">
-            <i class="bi bi-chat-dots" style="font-size: 24px;"></i>
-            <span class="d-md-none ms-2">Assistente</span>
-          </a>
-        </div>
+
+        <!-- Menu Items -->
+        <ul class="nav nav-pills flex-column flex-grow-1 px-2 mb-auto">
+          <li class="nav-item mb-2">
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              class="nav-link text-white d-flex align-items-center justify-content-center py-3 rounded"
+              (click)="closeSidebar()" style="min-height: 64px;">
+              <i class="bi bi-grid-3x3-gap fs-5"></i>
+              <span class="sidebar-label d-none small ms-2">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a routerLink="/tickets" routerLinkActive="active"
+              class="nav-link text-white d-flex align-items-center justify-content-center py-3 rounded"
+              (click)="closeSidebar()" style="min-height: 64px;">
+              <i class="bi bi-stack fs-5"></i>
+              <span class="sidebar-label d-none small ms-2">Tickets</span>
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a routerLink="/kanban" routerLinkActive="active"
+              class="nav-link text-white d-flex align-items-center justify-content-center py-3 rounded"
+              (click)="closeSidebar()" style="min-height: 64px;">
+              <i class="bi bi-kanban fs-5"></i>
+              <span class="sidebar-label d-none small ms-2">Kanban</span>
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a routerLink="/text-reviewer" routerLinkActive="active"
+              class="nav-link text-white d-flex align-items-center justify-content-center py-3 rounded"
+              (click)="closeSidebar()" style="min-height: 64px;">
+              <i class="bi bi-pencil-square fs-5"></i>
+              <span class="sidebar-label d-none small ms-2">Revisor</span>
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a routerLink="/chat" routerLinkActive="active"
+              class="nav-link text-white d-flex align-items-center justify-content-center py-3 rounded"
+              (click)="closeSidebar()" style="min-height: 64px;">
+              <i class="bi bi-chat-dots fs-5"></i>
+              <span class="sidebar-label d-none small ms-2">Axis AI</span>
+            </a>
+          </li>
+        </ul>
       </div>
-    </div>
+    </nav>
 
     <!-- Conteúdo Principal -->
     <div class="col d-flex flex-column content-wrapper" style="margin-left: 80px;">
@@ -69,8 +80,10 @@
               <i class="bi bi-list" style="font-size: 1.75rem;"></i>
             </button>
             <div class="header-title flex-grow-1 min-w-0">
-              <h4 class="mb-0 fw-semibold text-truncate" style="color: #1e3a5f; font-size: 1.25rem;">AXIS Service Desk</h4>
-              <small class="text-muted d-none d-sm-inline" style="font-size: 0.75rem;">Sistema de Gestão de Tickets</small>
+              <h4 class="mb-0 fw-semibold text-truncate" style="color: #1e3a5f; font-size: 1.25rem;">AXIS Service Desk
+              </h4>
+              <small class="text-muted d-none d-sm-inline" style="font-size: 0.75rem;">Sistema de Gestão de
+                Tickets</small>
             </div>
           </div>
           <div class="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0">
@@ -83,8 +96,10 @@
               </div>
               <div class="d-none d-lg-block">
                 @if (currentUser()) {
-                <div class="fw-semibold small text-truncate" style="color: #1e3a5f; max-width: 150px;">{{ currentUser()!.nome }}</div>
-                <div class="text-muted text-truncate" style="font-size: 0.7rem; max-width: 150px;">{{ currentUser()!.email }}</div>
+                <div class="fw-semibold small text-truncate" style="color: #1e3a5f; max-width: 150px;">{{
+                  currentUser()!.nome }}</div>
+                <div class="text-muted text-truncate" style="font-size: 0.7rem; max-width: 150px;">{{
+                  currentUser()!.email }}</div>
                 } @else {
                 <div class="fw-semibold small text-truncate" style="color: #1e3a5f; max-width: 150px;">Usuário</div>
                 <div class="text-muted text-truncate" style="font-size: 0.7rem; max-width: 150px;">Não logado</div>
@@ -137,7 +152,7 @@
         class="text-decoration-none d-flex flex-column align-items-center justify-content-center nav-mobile-item"
         style="flex: 1;">
         <i class="bi bi-chat-dots fs-5 mb-1"></i>
-        <small class="small">Assistente</small>
+        <small class="small">Axis AI</small>
       </a>
     </div>
   </nav>
