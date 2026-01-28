@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "axis-service-desk": {
+    "tasky": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/axis-service-desk",
+            "outputPath": "dist/tasky",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -64,10 +64,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "axis-service-desk:build:production"
+              "buildTarget": "tasky:build:production"
             },
             "development": {
-              "buildTarget": "axis-service-desk:build:development"
+              "buildTarget": "tasky:build:development"
             }
           },
           "defaultConfiguration": "development"

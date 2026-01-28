@@ -5,7 +5,7 @@ import { Ticket, Comentario } from '../interfaces/ticket.interface';
   providedIn: 'root',
 })
 export class TicketService {
-  private readonly STORAGE_KEY = 'axis_tickets';
+  private readonly STORAGE_KEY = 'tasky_tickets';
   
   private tickets: Ticket[] = this.carregarDoLocalStorage();
   

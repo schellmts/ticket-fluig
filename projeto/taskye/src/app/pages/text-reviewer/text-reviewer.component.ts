@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { Layout } from '../../components/layout/layout.component';
 import { TextReviewerService } from '../../services/text-reviewer.service';
+import { GeminiApiKeyService } from '../../services/gemini-api-key.service';
 import { ModelOption, AnalysisResult } from '../../interfaces/text-reviewer.interface';
 
 @Component({
@@ -15,6 +16,7 @@ import { ModelOption, AnalysisResult } from '../../interfaces/text-reviewer.inte
 })
 export class TextReviewerComponent implements OnInit, OnDestroy {
   private textReviewerService = inject(TextReviewerService);
+  private apiKeyService = inject(GeminiApiKeyService);
   private destroy$ = new Subject<void>();
 
   inputText = signal('');
@@ -34,9 +36,55 @@ export class TextReviewerComponent implements OnInit, OnDestroy {
   selectedModel = signal(this.defaultModels[0].name);
   isValidatingKey = signal(false);
   keyValidated = signal(false);
+  
+  // Chave da API inserida pelo usuário
+  apiKeyInput = signal('');
+  showApiKeyInput = signal(false);
 
   ngOnInit(): void {
+    // Carregar chave salva se existir
+    const savedKey = this.apiKeyService.getApiKey();
+    if (savedKey) {
+      this.apiKeyInput.set(savedKey);
+      this.validateKeyAndFetchModels();
+    } else {
+      // Se não houver chave salva, mostrar input
+      this.showApiKeyInput.set(true);
+    }
+  }
+  
+  /**
+   * Salva a chave da API e valida
+   */
+  saveApiKey(): void {
+    const key = this.apiKeyInput().trim();
+    if (!key) {
+      this.error.set('Por favor, insira uma chave da API válida.');
+      return;
+    }
+    
+    this.apiKeyService.setApiKey(key);
+    this.showApiKeyInput.set(false);
     this.validateKeyAndFetchModels();
+  }
+  
+  /**
+   * Altera a chave da API
+   */
+  changeApiKey(): void {
+    this.showApiKeyInput.set(true);
+    this.keyValidated.set(false);
+  }
+  
+  /**
+   * Remove a chave da API
+   */
+  clearApiKey(): void {
+    this.apiKeyService.clearApiKey();
+    this.apiKeyInput.set('');
+    this.showApiKeyInput.set(true);
+    this.keyValidated.set(false);
+    this.availableModels.set(this.defaultModels);
   }
 
   updateInputText(event: Event) {
@@ -45,6 +93,10 @@ export class TextReviewerComponent implements OnInit, OnDestroy {
 
   updateTone(event: Event) {
     this.tone.set((event.target as HTMLSelectElement).value);
+  }
+
+  updateApiKeyInput(event: Event) {
+    this.apiKeyInput.set((event.target as HTMLInputElement).value);
   }
 
   updateSelectedModel(event: Event) {

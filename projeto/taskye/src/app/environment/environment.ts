@@ -1,4 +1,4 @@
 export const environment = {
   APP_GEMINI_URL: 'https://generativelanguage.googleapis.com/v1beta',
-  APP_GEMINI_KEY: 'AIzaSyCJPMPbaDEqWsX-KB0fFd68aWqovLFPwO8'
+  APP_GEMINI_KEY: ''
 };

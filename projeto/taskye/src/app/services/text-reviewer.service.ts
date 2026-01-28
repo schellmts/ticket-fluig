@@ -36,8 +36,6 @@ export class TextReviewerService {
 
 
   validateKeyAndFetchModels(): Observable<ModelOption[]> {
-
-
     return this.http.get<GeminiModelsResponse>(`${this.API_BASE_URL}/models`).pipe(
       map((data) => {
         const supportedModels = data.models
@@ -132,7 +130,7 @@ export class TextReviewerService {
       }),
       catchError((error: HttpErrorResponse) => {
         if (error.error?.error?.code === 429 ||
-          error.error?.error?.message?.toLowerCase().includes('quota')) {
+            error.error?.error?.message?.toLowerCase().includes('quota')) {
           return throwError(() => new Error('QUOTA_EXCEEDED'));
         }
         const errorMessage = error.error?.error?.message || 'Erro na API';

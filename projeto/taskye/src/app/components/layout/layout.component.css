@@ -100,6 +100,17 @@
 }
 
 /* Header responsivo */
+.header-title {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.header-title h4 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media (max-width: 576px) {
   .header-title h4 {
     font-size: 1.1rem;
@@ -107,5 +118,33 @@
   
   .header-title small {
     font-size: 0.7rem;
+  }
+  
+  .header-user-info {
+    display: none !important;
+  }
+}
+
+/* Correção para navbar não quebrar */
+.content-wrapper {
+  width: 100%;
+  min-width: 0;
+}
+
+header {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Garantir que o header não quebre */
+@media (max-width: 992px) {
+  .header-title {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-title {
+    max-width: 150px;
   }
 }

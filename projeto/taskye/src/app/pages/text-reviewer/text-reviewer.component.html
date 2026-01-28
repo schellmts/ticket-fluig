@@ -16,6 +16,68 @@
         </div>
       </header>
 
+      <!-- Card de Configuração da API Key -->
+      @if (showApiKeyInput()) {
+      <div class="card shadow-sm mb-4 border-warning">
+        <div class="card-header bg-warning bg-opacity-10 border-warning">
+          <h6 class="mb-0 fw-semibold">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            Configuração da Chave da API Gemini
+          </h6>
+        </div>
+        <div class="card-body">
+          <p class="small text-muted mb-3">
+            Para usar esta ferramenta, você precisa de uma chave da API Gemini.
+            <a href="https://makersuite.google.com/app/apikey" target="_blank" class="text-decoration-none">
+              Obtenha sua chave aqui
+            </a>
+          </p>
+          <div class="d-flex gap-2">
+            <input type="password" 
+              [value]="apiKeyInput()" 
+              (input)="updateApiKeyInput($event)"
+              placeholder="Cole sua chave da API aqui (AIza...)"
+              class="form-control"
+              (keyup.enter)="saveApiKey()">
+            <button (click)="saveApiKey()" class="btn btn-primary" [disabled]="!apiKeyInput().trim()">
+              Salvar e Validar
+            </button>
+          </div>
+          <small class="text-muted d-block mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4" />
+              <path d="M12 8h.01" />
+            </svg>
+            Sua chave será salva localmente no navegador e não será compartilhada.
+          </small>
+        </div>
+      </div>
+      }
+
+      <!-- Status da Chave (quando configurada) -->
+      @if (!showApiKeyInput() && keyValidated()) {
+      <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+            <span class="small">Chave da API configurada e validada com sucesso!</span>
+          </div>
+          <button type="button" class="btn btn-sm btn-link text-muted p-0" (click)="changeApiKey()" title="Alterar chave">
+            Alterar
+          </button>
+        </div>
+      </div>
+      }
+
       <div class="card shadow-sm mb-4">
         <div class="card-body">
           <div class="d-flex align-items-center justify-content-between mb-3">
