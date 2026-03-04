@@ -10,7 +10,7 @@
 
 .cdk-drag-placeholder {
   opacity: 0.3;
-  border: 2px dashed #1e3a5f;
+  border: 2px dashed #06002E;
   border-radius: 4px;
   margin-bottom: 1rem;
   min-height: 120px;
@@ -44,7 +44,7 @@
   min-height: 120px;
   border: 2px dashed #ccc;
   border-radius: 4px;
-  background: #f8f9fa;
+  background: var(--app-bg);
   margin-bottom: 1rem;
 }
 

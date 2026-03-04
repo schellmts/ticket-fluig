@@ -242,7 +242,7 @@ export class TicketDetailComponent implements OnInit {
         Swal.fire({
           icon: 'success',
           title: 'Ticket resolvido!',
-          confirmButtonColor: '#0d6efd',
+          confirmButtonColor: '#06002E',
           timer: 2000
         });
       }
@@ -256,7 +256,7 @@ export class TicketDetailComponent implements OnInit {
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#6c757d',
-      cancelButtonColor: '#0d6efd',
+      cancelButtonColor: '#06002E',
       confirmButtonText: 'Sim, fechar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
@@ -271,7 +271,7 @@ export class TicketDetailComponent implements OnInit {
       title: 'Reatribuir ticket',
       text: 'Funcionalidade em desenvolvimento',
       icon: 'info',
-      confirmButtonColor: '#0d6efd'
+      confirmButtonColor: '#06002E'
     });
   }
 

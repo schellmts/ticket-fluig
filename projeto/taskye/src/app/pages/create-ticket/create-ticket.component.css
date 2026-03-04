@@ -1,69 +1,124 @@
-/* Estilos do formulário de criação de ticket */
-.card {
-  transition: box-shadow 0.2s ease-in-out;
+/* Card principal */
+.create-ticket-card {
+  transition: box-shadow 0.2s ease;
+  border-radius: 0.75rem;
 }
 
-.card:hover {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+.create-ticket-card:hover {
+  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.08) !important;
 }
 
-.form-label {
-  color: #495057;
-  margin-bottom: 0.5rem;
+/* Header do card */
+.create-ticket-header {
+  background: linear-gradient(135deg, #06002E 0%, #0d0044 100%) !important;
+  border: none !important;
+  color: #fff;
 }
 
-.form-control:focus,
-.form-select:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+.create-ticket-header-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.5rem;
 }
 
-.form-control::placeholder,
-.form-select option:first-child {
-  color: #adb5bd;
+.create-ticket-title {
+  color: #fff !important;
+  font-size: 1.2rem;
+}
+
+.hover-opacity-100:hover {
+  opacity: 1 !important;
 }
 
 /* Seções do formulário */
-.form-label.text-muted {
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.create-ticket-section {
+  margin-bottom: 1.75rem;
+}
+
+.create-ticket-section:last-of-type {
+  margin-bottom: 0;
+}
+
+.create-ticket-section-title {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
   font-weight: 600;
-  margin-top: 1rem;
-  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--app-text-muted, #6c757d);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--app-border, #eee);
 }
 
-/* Botões */
-.btn-primary {
+.create-ticket-section-title i {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.create-ticket-section-body {
+  padding-left: 0;
+}
+
+/* Labels e inputs */
+.create-ticket-card .form-label {
   font-weight: 500;
-  transition: all 0.2s ease-in-out;
+  color: var(--app-text, #212529);
+  margin-bottom: 0.35rem;
 }
 
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0.25rem 0.5rem rgba(13, 110, 253, 0.3);
+.create-ticket-card .form-control:focus,
+.create-ticket-card .form-select:focus {
+  border-color: #06002E;
+  box-shadow: 0 0 0 0.2rem rgba(6, 0, 46, 0.15);
 }
 
-.btn-secondary {
-  transition: all 0.2s ease-in-out;
+.create-ticket-card .form-text {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--app-text-muted, #6c757d);
 }
 
-.btn-secondary:hover {
-  transform: translateY(-1px);
+/* Ações */
+.create-ticket-actions {
+  border-color: var(--app-border, #dee2e6) !important;
+}
+
+.create-ticket-actions .btn {
+  min-width: 140px;
+  font-weight: 500;
 }
 
 /* Responsividade */
-@media (max-width: 768px) {
-  .card-body {
-    padding: 1rem !important;
+@media (max-width: 576px) {
+  .create-ticket-card .card-body {
+    padding: 1.25rem !important;
   }
-  
-  .form-label {
-    font-size: 0.9rem;
+
+  .create-ticket-header .d-flex.gap-3 {
+    gap: 0.75rem !important;
   }
-  
-  .btn {
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
+
+  .create-ticket-header-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1.25rem;
+  }
+
+  .create-ticket-title {
+    font-size: 1.05rem !important;
+  }
+
+  .create-ticket-actions {
+    flex-direction: column-reverse;
+  }
+
+  .create-ticket-actions .btn {
+    width: 100%;
+    min-width: 0;
   }
 }
 

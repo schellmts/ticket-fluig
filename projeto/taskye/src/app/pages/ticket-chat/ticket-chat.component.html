@@ -1,5 +1,5 @@
 <app-layout>
-  <div class="container-fluid py-4" style="background-color: #f8f9fa; min-height: calc(100vh - 80px);">
+  <div class="container-fluid py-4 app-page-content">
     <div class="container-lg">
       <header class="d-flex align-items-center gap-3 pb-4 mb-4 border-bottom">
         <div class="bg-primary p-2 rounded text-white shadow">
@@ -18,42 +18,21 @@
         <div class="col-12 col-lg-10 mx-auto">
           <div class="card shadow-sm border-0" style="height: 600px; display: flex; flex-direction: column;">
             <!-- Cabeçalho do Chat -->
-            <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between gap-2">
-              <div class="d-flex align-items-center gap-2">
-                <div class="bg-white bg-opacity-25 rounded-circle p-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                  </svg>
-                </div>
-                <div>
-                  <div class="fw-semibold">Axis AI</div>
-                  <small class="opacity-75">Online</small>
-                </div>
+            <div class="card-header bg-primary text-white d-flex align-items-center gap-2">
+              <div class="bg-white bg-opacity-25 rounded-circle p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
               </div>
-              <!-- Seletor de Modelo -->
-              <div class="d-flex align-items-center gap-2">
-                <label for="modelSelect" class="small opacity-75 mb-0">Modelo:</label>
-                <select 
-                  id="modelSelect"
-                  class="form-select form-select-sm" 
-                  style="width: auto; min-width: 200px;"
-                  [value]="selectedModel()" 
-                  (change)="onModelChange($any($event.target).value)"
-                  [disabled]="isLoadingModels() || loading()">
-                  @if (isLoadingModels()) {
-                    <option>Carregando modelos...</option>
-                  } @else {
-                    @for (model of availableModels(); track model.name) {
-                      <option [value]="model.name">{{ model.displayName }}</option>
-                    }
-                  }
-                </select>
+              <div>
+                <div class="fw-semibold">Axis AI</div>
+                <small class="opacity-75">Online</small>
               </div>
             </div>
 
             <!-- Área de Mensagens -->
-            <div #chatContainer class="card-body flex-grow-1 overflow-auto p-4" style="background-color: #f8f9fa;">
+            <div #chatContainer class="card-body flex-grow-1 overflow-auto p-4 app-page-content">
               @for (message of messages(); track message.id) {
               <div class="mb-4 d-flex" [class.justify-content-end]="message.type === 'user'"
                 [class.justify-content-start]="message.type !== 'user'">
@@ -155,6 +134,23 @@
 
             <!-- Área de Input -->
             <div class="card-footer bg-white border-top p-3">
+              @if (speechSupported()) {
+              <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                <div class="form-check form-switch mb-0 small">
+                  <input class="form-check-input" type="checkbox" id="modoAutoVoz" [checked]="modoAutomatico()" (change)="modoAutomatico.set($any($event.target).checked)">
+                  <label class="form-check-label text-muted" for="modoAutoVoz">Enviar ao pausar voz</label>
+                </div>
+                <button type="button" class="btn btn-sm ms-auto"
+                  [class.btn-danger]="gravandoAudio()"
+                  [class.btn-outline-secondary]="!gravandoAudio()"
+                  [disabled]="loading()"
+                  (click)="toggleGravacao()"
+                  [title]="gravandoAudio() ? 'Parar gravação' : 'Falar comando'">
+                  <i [class]="gravandoAudio() ? 'bi bi-mic-mute-fill' : 'bi bi-mic-fill'"></i>
+                  {{ gravandoAudio() ? ' Parar' : ' Falar' }}
+                </button>
+              </div>
+              }
               <!-- Preview do arquivo selecionado -->
               @if (selectedFile()) {
               <div class="mb-2 p-2 bg-light rounded d-flex align-items-center justify-content-between">
@@ -162,7 +158,7 @@
                   @if (filePreview()) {
                   <img [src]="filePreview()" alt="Preview" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
                   } @else {
-                  <i [class]="'bi ' + getFileIcon(selectedFile()!.name)" style="font-size: 24px; color: #0d6efd;"></i>
+                  <i [class]="'bi ' + getFileIcon(selectedFile()!.name)" style="font-size: 24px; color: #06002E;"></i>
                   }
                   <div>
                     <small class="d-block fw-semibold">{{ selectedFile()!.name }}</small>

@@ -37,7 +37,7 @@ export class CreateTicketComponent {
         icon: 'warning',
         title: 'Campos obrigatórios',
         text: 'Por favor, preencha o título e a descrição do ticket.',
-        confirmButtonColor: '#0d6efd'
+        confirmButtonColor: '#06002E'
       });
       return;
     }
@@ -50,7 +50,7 @@ export class CreateTicketComponent {
       icon: 'success',
       title: 'Ticket criado!',
       text: `Ticket ${ticket.id} criado com sucesso.`,
-      confirmButtonColor: '#0d6efd',
+      confirmButtonColor: '#06002E',
       timer: 2000,
       showConfirmButton: true
     }).then(() => {

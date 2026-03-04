@@ -15,37 +15,16 @@
 @if (chatOpen()) {
 <div class="floating-chat-window shadow-lg">
   <!-- Cabeçalho -->
-  <div class="chat-header bg-primary text-white d-flex align-items-center justify-content-between gap-2 p-2 p-md-3 flex-wrap">
-    <div class="d-flex align-items-center gap-2">
-      <div class="bg-white bg-opacity-25 rounded-circle p-2 flex-shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-      </div>
-      <div class="flex-shrink-0">
-        <div class="fw-semibold small">Axis AI</div>
-        <small class="opacity-75" style="font-size: 0.7rem;">Online</small>
-      </div>
+  <div class="chat-header bg-primary text-white d-flex align-items-center gap-2 p-2 p-md-3">
+    <div class="bg-white bg-opacity-25 rounded-circle p-2 flex-shrink-0">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      </svg>
     </div>
-    <!-- Seletor de Modelo -->
-    <div class="d-flex align-items-center gap-1 flex-shrink-0">
-      <label for="floatingModelSelect" class="small opacity-75 mb-0 d-none d-lg-block" style="font-size: 0.7rem;">Modelo:</label>
-      <select 
-        id="floatingModelSelect"
-        class="form-select form-select-sm" 
-        style="width: auto; min-width: 120px; max-width: 150px; font-size: 0.75rem;"
-        [value]="selectedModel()" 
-        (change)="onModelChange($any($event.target).value)"
-        [disabled]="isLoadingModels() || loading()">
-        @if (isLoadingModels()) {
-          <option>Carregando...</option>
-        } @else {
-          @for (model of availableModels(); track model.name) {
-            <option [value]="model.name">{{ model.displayName }}</option>
-          }
-        }
-      </select>
+    <div>
+      <div class="fw-semibold small">Axis AI</div>
+      <small class="opacity-75" style="font-size: 0.7rem;">Online</small>
     </div>
   </div>
 
@@ -143,6 +122,23 @@
 
   <!-- Área de Input -->
   <div class="chat-input-area bg-white border-top p-2">
+    @if (speechSupported()) {
+    <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+      <div class="form-check form-switch mb-0 small">
+        <input class="form-check-input" type="checkbox" id="modoAutoVoz" [checked]="modoAutomatico()" (change)="modoAutomatico.set($any($event.target).checked)">
+        <label class="form-check-label text-muted" for="modoAutoVoz">Enviar ao pausar voz</label>
+      </div>
+      <button type="button" class="btn btn-sm ms-auto"
+        [class.btn-danger]="gravandoAudio()"
+        [class.btn-outline-secondary]="!gravandoAudio()"
+        [disabled]="loading()"
+        (click)="toggleGravacao()"
+        [title]="gravandoAudio() ? 'Parar gravação' : 'Falar comando'">
+        <i [class]="gravandoAudio() ? 'bi bi-mic-mute-fill' : 'bi bi-mic-fill'"></i>
+        {{ gravandoAudio() ? ' Parar' : ' Falar' }}
+      </button>
+    </div>
+    }
     <!-- Preview do arquivo -->
     @if (selectedFile()) {
     <div class="mb-2 p-2 bg-light rounded d-flex align-items-center justify-content-between">
@@ -150,7 +146,7 @@
         @if (filePreview()) {
         <img [src]="filePreview()" alt="Preview" style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;">
         } @else {
-        <i [class]="'bi ' + getFileIcon(selectedFile()!.name)" style="font-size: 18px; color: #0d6efd;"></i>
+        <i [class]="'bi ' + getFileIcon(selectedFile()!.name)" style="font-size: 18px; color: #06002E;"></i>
         }
         <div>
           <small class="d-block fw-semibold">{{ selectedFile()!.name }}</small>

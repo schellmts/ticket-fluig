@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme.service';
 import { FloatingChatComponent } from '../floating-chat/floating-chat.component';
 import Swal from 'sweetalert2';
 
@@ -14,6 +15,7 @@ import Swal from 'sweetalert2';
 export class Layout implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
+  theme = inject(ThemeService);
   
   sidebarOpen = false;
   currentUser = signal(this.authService.getCurrentUser());
@@ -37,6 +39,10 @@ export class Layout implements OnInit {
 
   closeSidebar() {
     this.sidebarOpen = false;
+  }
+
+  toggleTheme(): void {
+    this.theme.toggle();
   }
 
   logout() {

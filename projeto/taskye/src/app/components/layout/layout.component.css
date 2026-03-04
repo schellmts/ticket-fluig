@@ -142,13 +142,13 @@
 
   .navbar.fixed-bottom .nav-mobile-item.active,
   .navbar.fixed-bottom .nav-mobile-item.router-link-active {
-    color: #0d6efd;
-    background-color: rgba(13, 110, 253, 0.1);
+    color: var(--app-focus);
+    background-color: rgba(var(--app-focus-rgb), 0.15);
   }
 
   .navbar.fixed-bottom .nav-mobile-item.active i,
   .navbar.fixed-bottom .nav-mobile-item.router-link-active i {
-    color: #0d6efd;
+    color: var(--app-focus);
   }
 
   .navbar.fixed-bottom .nav-mobile-item small {
@@ -210,4 +210,70 @@ header {
   .header-title {
     max-width: 150px;
   }
+}
+
+.min-w-200 {
+  min-width: 200px;
+}
+
+/* Logo sidebar: div redonda branca com logo mini */
+.sidebar-logo-wrap {
+  flex-shrink: 0;
+  overflow: hidden;
+  padding: 2px;
+}
+.sidebar-logo-mini {
+  display: block;
+}
+
+/* Tema: header e navbar usam variáveis */
+.app-header {
+  background-color: var(--app-header-bg) !important;
+  color: var(--app-text);
+}
+
+.app-header-title,
+.app-header-user-name,
+.app-header-btn,
+.app-header-subtitle {
+  color: var(--app-text) !important;
+}
+
+.app-header-subtitle.text-muted {
+  color: var(--app-text-muted) !important;
+}
+
+.theme-toggle {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.app-user-trigger {
+  color: var(--app-text) !important;
+}
+
+.app-navbar-mobile {
+  background-color: var(--app-header-bg) !important;
+  border-color: var(--app-border) !important;
+}
+
+/* Transição suave do dropdown do usuário (abrir e fechar) */
+.header-user-info .dropdown-menu {
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+.header-user-info .dropdown .dropdown-menu {
+  opacity: 0;
+  transform: translateY(-8px);
+  visibility: hidden;
+  pointer-events: none;
+  display: block !important; /* mantém no fluxo para a transição de fechar */
+}
+.header-user-info .dropdown.show .dropdown-menu {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+.header-user-info .dropdown-menu .dropdown-item {
+  transition: background-color 0.15s ease;
 }

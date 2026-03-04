@@ -36,6 +36,11 @@ interface TicketAICreation {
   categoria: 'Hardware' | 'Software' | 'Acesso' | 'Rede' | 'Outros';
 }
 
+/** Resposta do assistente genérico - cria ticket ou retorna texto */
+export type AssistenteResponse =
+  | { type: 'create_ticket'; data: TicketAICreation }
+  | { type: 'text'; data: string };
+
 @Injectable({
   providedIn: 'root'
 })
@@ -129,7 +134,7 @@ export class TicketAIService {
     // Mas verificamos se existe para dar feedback melhor ao usuário
     const apiKey = this.geminiApiKeyService.getApiKey();
     if (!apiKey) {
-      return throwError(() => new Error('Chave da API Gemini não configurada. Configure em Configurações > Revisor com Gemini.'));
+      return throwError(() => new Error('Chave da API Gemini não configurada. Configure em Config IA.'));
     }
 
     const promptTexto = mensagem.trim() || 'Analise o anexo fornecido e crie um ticket baseado no conteúdo.';
@@ -278,6 +283,73 @@ IMPORTANTE: Retorne APENAS o JSON, sem explicações adicionais, sem markdown, s
           parts: parts
         }]
       }
+    );
+  }
+
+  /**
+   * Processa comando do assistente (voz ou texto) - pode criar ticket, criar sala ou responder texto.
+   * Usado no chat com reconhecimento de voz.
+   */
+  processarComandoAssistente(mensagem: string, modeloSelecionado?: string): Observable<AssistenteResponse> {
+    if (!mensagem.trim()) {
+      return throwError(() => new Error('Mensagem vazia.'));
+    }
+
+    const apiKey = this.geminiApiKeyService.getApiKey();
+    if (!apiKey) {
+      return throwError(() => new Error('Chave da API Gemini não configurada. Configure em Config IA.'));
+    }
+
+    const systemInstruction = `Você é um assistente de Service Desk do sistema Taskye.
+- Se o usuário descrever um problema ou pedir criar um CHAMADO/TICKET, responda com JSON: {"action":"create_ticket","parameters":{"titulo":"...","descricao":"...","prioridade":"Alta|Média|Baixa","categoria":"Hardware|Software|Acesso|Rede|Outros"}}
+- Para qualquer outra conversa, responda em texto simples e direto (não use JSON).
+IMPORTANTE: Nunca use crases ou markdown. Retorne JSON puro ou texto puro.`;
+
+    const modeloObservable = modeloSelecionado
+      ? of([{ name: modeloSelecionado }] as ModelOption[])
+      : this.buscarModelosDisponiveis();
+
+    return modeloObservable.pipe(
+      switchMap((modelos) => {
+        const modelo = modeloSelecionado || this.selecionarMelhorModelo(modelos);
+        const modelId = modelo.startsWith('models/') ? modelo.replace('models/', '') : modelo;
+        return this.http.post<GeminiGenerateResponse>(
+          `${this.API_BASE_URL}/models/${modelId}:generateContent`,
+          {
+            contents: [{ parts: [{ text: mensagem }] }],
+            systemInstruction: { parts: [{ text: systemInstruction }] }
+          }
+        );
+      }),
+      map((data) => {
+        const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!textResponse) throw new Error('Sem resposta da IA.');
+
+        const trimmed = textResponse.trim();
+        const jsonMatch = trimmed.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            const parsed = JSON.parse(jsonMatch[0]) as { action?: string; parameters?: any };
+            if (parsed.action === 'create_ticket' && parsed.parameters) {
+              const p = parsed.parameters;
+              const ticket: TicketAICreation = {
+                titulo: String(p.titulo || this.extrairTitulo(mensagem)),
+                descricao: String(p.descricao || mensagem),
+                prioridade: ['Alta', 'Média', 'Baixa'].includes(p.prioridade) ? p.prioridade : 'Média',
+                categoria: ['Hardware', 'Software', 'Acesso', 'Rede', 'Outros'].includes(p.categoria) ? p.categoria : 'Outros'
+              };
+              return { type: 'create_ticket' as const, data: ticket };
+            }
+          } catch {
+            /* fallback para texto */
+          }
+        }
+        return { type: 'text' as const, data: trimmed };
+      }),
+      catchError((error: HttpErrorResponse) => {
+        const msg = error.error?.error?.message || 'Erro ao processar com IA';
+        return throwError(() => new Error(msg));
+      })
     );
   }
 

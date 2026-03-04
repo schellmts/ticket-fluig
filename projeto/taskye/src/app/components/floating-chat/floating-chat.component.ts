@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
-import { TicketAIService } from '../../services/ticket-ai.service';
+import { TicketAIService, AssistenteResponse } from '../../services/ticket-ai.service';
 import { TicketService } from '../../services/ticket';
 import { AuthService } from '../../services/auth.service';
-import { ModelOption } from '../../interfaces/text-reviewer.interface';
+import { SpeechRecognitionService } from '../../services/speech-recognition.service';
+import { AiConfigService } from '../../services/ai-config.service';
 import Swal from 'sweetalert2';
 
 interface ChatMessage {
@@ -35,26 +36,49 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
   private ticketService = inject(TicketService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private speechService = inject(SpeechRecognitionService);
+  private aiConfigService = inject(AiConfigService);
   private destroy$ = new Subject<void>();
 
   @ViewChild('chatContainer') chatContainer!: ElementRef;
   @ViewChild('messageInput') messageInput!: ElementRef;
 
-  private readonly STORAGE_KEY_MODEL = 'ticket_chat_selected_model';
+  private readonly SILENCE_TIMEOUT_MS = 2500;
+  private parouManualmente = false;
+  private silenceTimerId: ReturnType<typeof setTimeout> | null = null;
 
   chatOpen = signal(false);
   messages = signal<ChatMessage[]>([]);
   currentMessage = signal('');
   loading = signal(false);
   shouldScroll = signal(false);
-  availableModels = signal<ModelOption[]>([]);
-  selectedModel = signal<string>('');
-  isLoadingModels = signal(false);
   selectedFile = signal<File | null>(null);
   filePreview = signal<string | null>(null);
 
+  /** Controle de reconhecimento de voz */
+  gravandoAudio = signal(false);
+  modoAutomatico = signal(false);
+  speechSupported = signal(false);
+
   ngOnInit(): void {
-    this.loadAvailableModels();
+    this.speechSupported.set(this.speechService.isSupported);
+
+    if (this.speechService.isSupported) {
+      this.speechService.textStream$.pipe(takeUntil(this.destroy$)).subscribe((texto: string) => {
+        const espaco = this.currentMessage().trim() ? ' ' : '';
+        this.currentMessage.update(msg => msg + espaco + texto);
+        this.agendarEnvioAutomatico();
+      });
+
+      this.speechService.isListening$.pipe(takeUntil(this.destroy$)).subscribe((estaOuvindo: boolean) => {
+        this.gravandoAudio.set(estaOuvindo);
+        if (!estaOuvindo) {
+          this.cancelarEnvioAutomatico();
+          this.parouManualmente = false;
+        }
+      });
+    }
+
     if (this.chatOpen()) {
       this.addSystemMessage('Olá! Sou o Axis AI, seu assistente virtual para abertura de chamados. Descreva seu problema e eu criarei um ticket automaticamente para você.');
     }
@@ -68,6 +92,7 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
   }
 
   ngOnDestroy(): void {
+    this.cancelarEnvioAutomatico();
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -84,56 +109,39 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
     }, 100);
   }
 
-  loadAvailableModels(): void {
-    this.isLoadingModels.set(true);
-    this.ticketAIService.buscarModelosDisponiveis()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (modelos) => {
-          this.availableModels.set(modelos);
-          const savedModel = localStorage.getItem(this.STORAGE_KEY_MODEL);
-          let modeloParaUsar = '';
-          
-          if (savedModel && modelos.some(m => m.name === savedModel)) {
-            modeloParaUsar = savedModel;
-          } else if (modelos.length > 0) {
-            modeloParaUsar = modelos[0].name;
-          }
-          
-          if (modeloParaUsar) {
-            this.selectedModel.set(modeloParaUsar);
-            this.salvarModeloSelecionado(modeloParaUsar);
-          }
-          
-          this.isLoadingModels.set(false);
-        },
-        error: (err) => {
-          console.error('Erro ao carregar modelos:', err);
-          this.availableModels.set([
-            { name: 'models/gemini-1.5-flash', displayName: '(Free) Gemini 1.5 Flash' },
-            { name: 'models/gemini-2.0-flash-exp', displayName: '(Free) Gemini 2.0 Flash' },
-            { name: 'models/gemini-2.5-flash-exp', displayName: '(Free) Gemini 2.5 Flash' },
-            { name: 'models/gemini-1.5-pro', displayName: '(Pro) Gemini 1.5 Pro' }
-          ]);
-          const savedModel = localStorage.getItem(this.STORAGE_KEY_MODEL);
-          const modeloPadrao = savedModel || 'models/gemini-2.5-flash-exp';
-          this.selectedModel.set(modeloPadrao);
-          this.salvarModeloSelecionado(modeloPadrao);
-          this.isLoadingModels.set(false);
-        }
-      });
+  private agendarEnvioAutomatico(): void {
+    this.cancelarEnvioAutomatico();
+    if (!this.modoAutomatico() || this.loading()) return;
+    this.silenceTimerId = setTimeout(() => {
+      this.silenceTimerId = null;
+      if (!this.parouManualmente && this.modoAutomatico() && this.currentMessage().trim().length > 0 && !this.loading()) {
+        Swal.fire({ icon: 'info', title: 'Pausa detectada. Enviando...', timer: 1200, timerProgressBar: true, showConfirmButton: false, toast: true, position: 'top-end' });
+        this.sendMessage();
+      }
+    }, this.SILENCE_TIMEOUT_MS);
   }
 
-  onModelChange(modelName: string): void {
-    this.selectedModel.set(modelName);
-    this.salvarModeloSelecionado(modelName);
+  private cancelarEnvioAutomatico(): void {
+    if (this.silenceTimerId) {
+      clearTimeout(this.silenceTimerId);
+      this.silenceTimerId = null;
+    }
   }
 
-  private salvarModeloSelecionado(modelName: string): void {
-    if (modelName) {
-      localStorage.setItem(this.STORAGE_KEY_MODEL, modelName);
+  toggleGravacao(): void {
+    if (!this.speechService.isSupported) return;
+    if (this.gravandoAudio()) {
+      this.parouManualmente = true;
+      this.cancelarEnvioAutomatico();
+      this.speechService.stop();
+      Swal.fire({ icon: 'info', title: 'Microfone pausado', timer: 800, showConfirmButton: false, toast: true, position: 'top-end' });
     } else {
-      localStorage.removeItem(this.STORAGE_KEY_MODEL);
+      this.parouManualmente = false;
+      if (this.modoAutomatico()) {
+        this.currentMessage.set('');
+      }
+      this.speechService.start();
+      Swal.fire({ icon: 'info', title: 'Ouvindo...', timer: 800, showConfirmButton: false, toast: true, position: 'top-end' });
     }
   }
 
@@ -170,7 +178,7 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
           icon: 'error',
           title: 'Tipo de arquivo não suportado',
           text: 'Por favor, envie apenas imagens (JPG, PNG, GIF, WEBP) ou PDFs.',
-          confirmButtonColor: '#0d6efd'
+          confirmButtonColor: '#06002E'
         });
         return;
       }
@@ -180,7 +188,7 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
           icon: 'error',
           title: 'Arquivo muito grande',
           text: 'O arquivo deve ter no máximo 10MB.',
-          confirmButtonColor: '#0d6efd'
+          confirmButtonColor: '#06002E'
         });
         return;
       }
@@ -224,14 +232,13 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
 
     const currentUser = this.authService.getCurrentUser();
     const userName = currentUser?.nome || 'Usuário';
-    const modelo = this.selectedModel();
+    const modelo = this.aiConfigService.getModeloChatFlutuante() || undefined;
 
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
         const base64Data = (reader.result as string).split(',')[1];
         const mimeType = file.type;
-        
         this.ticketAIService.criarTicketComIA(userMessage || 'Analise o anexo fornecido', userName, modelo, {
           mimeType,
           data: base64Data,
@@ -254,7 +261,7 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
       };
       reader.readAsDataURL(file);
     } else {
-      this.ticketAIService.criarTicketComIA(userMessage, userName, modelo)
+      this.ticketAIService.processarComandoAssistente(userMessage, modelo)
         .pipe(
           takeUntil(this.destroy$),
           finalize(() => {
@@ -263,9 +270,17 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
           })
         )
         .subscribe({
-          next: (ticketData) => this.handleTicketResponse(ticketData),
+          next: (res) => this.handleAssistenteResponse(res),
           error: (err: Error) => this.handleError(err)
         });
+    }
+  }
+
+  private handleAssistenteResponse(res: AssistenteResponse): void {
+    if (res.type === 'create_ticket') {
+      this.handleTicketResponse(res.data);
+    } else {
+      this.addAssistantMessage(res.data);
     }
   }
 
@@ -285,7 +300,7 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
     let errorMsg = 'Desculpe, ocorreu um erro ao processar sua solicitação.';
     
     if (err.message.includes('Chave da API')) {
-      errorMsg = '⚠️ Chave da API Gemini não configurada. Configure em Configurações > Revisor com Gemini.';
+      errorMsg = '⚠️ Chave da API Gemini não configurada. Configure em Config IA.';
     } else if (err.message.includes('Cota')) {
       errorMsg = '⚠️ Cota da API excedida. Tente novamente mais tarde.';
     } else {
@@ -318,7 +333,7 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
       confirmButtonText: 'Ver Ticket',
       cancelButtonText: 'Fechar',
       showCancelButton: true,
-      confirmButtonColor: '#0d6efd'
+      confirmButtonColor: '#06002E'
     }).then((result) => {
       if (result.isConfirmed) {
         this.router.navigate(['/tickets', novoTicket.id]);

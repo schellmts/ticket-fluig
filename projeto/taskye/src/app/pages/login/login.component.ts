@@ -43,7 +43,7 @@ export class LoginComponent {
         icon: 'success',
         title: 'Login realizado!',
         text: `Bem-vindo, ${result.user.nome}!`,
-        confirmButtonColor: '#0d6efd',
+        confirmButtonColor: '#06002E',
         timer: 1500,
         showConfirmButton: false
       });

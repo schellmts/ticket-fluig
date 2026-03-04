@@ -124,7 +124,7 @@ export class ServiceDeskDashboardComponent {
       text: `Foram encontrados ${totalFiltrado} ticket(s) com os filtros selecionados.`,
       icon: 'success',
       confirmButtonText: 'OK',
-      confirmButtonColor: '#1e3a5f',
+      confirmButtonColor: '#06002E',
       timer: 2000,
       timerProgressBar: true
     });
@@ -143,7 +143,7 @@ export class ServiceDeskDashboardComponent {
   private initializeChartDistribuicao(): EChartsOption {
     // Dados fixos: Hardware, Acesso, Software, Outros, Rede
     const categorias = ['Hardware', 'Acesso', 'Software', 'Outros', 'Rede'];
-    const cores = ['#0d6efd', '#0dcaf0', '#6f42c1', '#6c757d', '#ffc107'];
+    const cores = ['#06002E', '#0dcaf0', '#6f42c1', '#6c757d', '#ffc107'];
     // Valores fixos: 35, 28, 22, 15, 20
     const valoresFixos = [35, 28, 22, 15, 20];
     
@@ -266,10 +266,10 @@ export class ServiceDeskDashboardComponent {
           type: 'line',
           data: ticketsAbertos,
           lineStyle: {
-            color: '#1e3a5f'
+            color: '#06002E'
           },
           itemStyle: {
-            color: '#1e3a5f'
+            color: '#06002E'
           },
           smooth: true
         },
